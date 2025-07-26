@@ -16,16 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
       errorDiv.style.display = 'none';
 
       // Check if chrome APIs are available
-      if (typeof chrome === 'undefined') {
-        throw new Error('Chrome extension APIs not available. Make sure this is running as a Chrome extension.');
-      }
-      
-      if (!chrome.tabs) {
-        throw new Error('Chrome tabs API not available. Check extension permissions.');
-      }
-      
-      if (!chrome.scripting) {
-        throw new Error('Chrome scripting API not available. Check extension permissions and manifest version.');
+      if (typeof chrome === 'undefined' || !chrome.tabs || !chrome.scripting) {
+        throw new Error('Extension not properly loaded. Please reload the extension in Chrome.');
       }
 
       // Get current tab with comprehensive error handling
@@ -93,32 +85,17 @@ document.addEventListener('DOMContentLoaded', function() {
       let analysisSuccess = false;
       let techData = null;
 
-      // Method 1: Try content script messaging with timeout
+      // Method 1: Try using existing content script
       try {
-        // First inject content script
-        await chrome.scripting.executeScript({
-          target: { tabId: tab.id },
-          files: ['content.js']
+        const response = await new Promise((resolve, reject) => {
+          chrome.tabs.sendMessage(tab.id, { action: 'analyzeTech' }, (response) => {
+            if (chrome.runtime.lastError) {
+              reject(new Error(chrome.runtime.lastError.message));
+            } else {
+              resolve(response);
+            }
+          });
         });
-        
-        // Wait for content script initialization
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Send message with timeout
-        const response = await Promise.race([
-          new Promise((resolve, reject) => {
-            chrome.tabs.sendMessage(tab.id, { action: 'analyzeTech' }, (response) => {
-              if (chrome.runtime.lastError) {
-                reject(new Error(chrome.runtime.lastError.message));
-              } else {
-                resolve(response);
-              }
-            });
-          }),
-          new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Content script timeout')), 5000)
-          )
-        ]);
         
         if (response && response.success && response.technologies) {
           techData = response.technologies;
