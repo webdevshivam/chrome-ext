@@ -139,11 +139,21 @@
         const technologies = analyzePageTechnologies();
         sendResponse({ success: true, technologies: technologies });
       } catch (error) {
+        console.error('Tech analysis error:', error);
         sendResponse({ success: false, error: error.message });
       }
     }
     return true; // Keep message channel open for async response
   });
+
+  // Signal that content script is ready
+  if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+    try {
+      chrome.runtime.sendMessage({ action: 'contentScriptReady' });
+    } catch (e) {
+      // Ignore if popup is not open
+    }
+  }
 
   // Enhanced technology detection that runs on page load
   function detectAdditionalTech() {
