@@ -1,21 +1,114 @@
+
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Popup</title>
+    <title>Tech Stack Analyzer</title>
     <style>
       body {
-        width: 200px;
-        padding: 10px;
+        width: 350px;
+        padding: 15px;
         font-family: Arial, sans-serif;
+        background: #f5f5f5;
       }
-      button {
-        padding: 8px 12px;
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+      }
+      .analyze-btn {
+        width: 100%;
+        padding: 10px;
+        background: #4285f4;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-bottom: 15px;
+      }
+      .analyze-btn:hover {
+        background: #3367d6;
+      }
+      .results {
+        background: white;
+        border-radius: 5px;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+      .tech-category {
+        margin-bottom: 15px;
+      }
+      .tech-category h4 {
+        margin: 0 0 8px 0;
+        color: #333;
+        border-bottom: 2px solid #4285f4;
+        padding-bottom: 5px;
+      }
+      .tech-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .tech-item {
+        background: #e8f0fe;
+        margin: 3px 0;
+        padding: 5px 10px;
+        border-radius: 3px;
+        font-size: 14px;
+      }
+      .loading {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+      }
+      .error {
+        color: #d93025;
+        text-align: center;
+      }
+      .url-info {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 10px;
+        word-break: break-all;
       }
     </style>
   </head>
   <body>
-    <h3>Hello, World!</h3>
-    <button id="clickMe">Click me</button>
+    <div class="header">
+      <h2>🔍 Tech Stack Analyzer</h2>
+    </div>
+    
+    <button id="analyzeBtn" class="analyze-btn">Analyze Current Website</button>
+    
+    <div id="urlInfo" class="url-info"></div>
+    
+    <div id="results" class="results" style="display: none;">
+      <div class="tech-category">
+        <h4>Frontend Technologies</h4>
+        <ul id="frontend" class="tech-list"></ul>
+      </div>
+      
+      <div class="tech-category">
+        <h4>Backend/Server</h4>
+        <ul id="backend" class="tech-list"></ul>
+      </div>
+      
+      <div class="tech-category">
+        <h4>Analytics & Marketing</h4>
+        <ul id="analytics" class="tech-list"></ul>
+      </div>
+      
+      <div class="tech-category">
+        <h4>Content Management</h4>
+        <ul id="cms" class="tech-list"></ul>
+      </div>
+    </div>
+    
+    <div id="loading" class="loading" style="display: none;">
+      Analyzing website...
+    </div>
+    
+    <div id="error" class="error" style="display: none;"></div>
 
     <script src="popup.js"></script>
   </body>

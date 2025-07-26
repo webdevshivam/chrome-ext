@@ -1,13 +1,23 @@
 {
   "manifest_version": 3,
-  "name": "My First Extension",
+  "name": "Tech Stack Analyzer",
   "version": "1.0",
-  "description": "A simple Chrome extension.",
+  "description": "Analyze websites to detect frontend and backend technologies.",
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon.png"
   },
-  "permissions": [],
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
   "icons": {
     "128": "icon.png"
   }
