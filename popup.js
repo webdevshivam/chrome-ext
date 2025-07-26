@@ -17,7 +17,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Check if chrome APIs are available
       if (typeof chrome === 'undefined' || !chrome.tabs || !chrome.scripting) {
-        throw new Error('Extension not properly loaded. Please reload the extension in Chrome.');
+        if (window.location.protocol === 'https:' && window.location.hostname.includes('replit')) {
+          throw new Error('This extension needs to be loaded in Chrome. Download the files and load as an unpacked extension in chrome://extensions/');
+        } else {
+          throw new Error('Extension not properly loaded. Please reload the extension in Chrome.');
+        }
       }
 
       // Get current tab with comprehensive error handling
