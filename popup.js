@@ -16,8 +16,16 @@ document.addEventListener('DOMContentLoaded', function() {
       errorDiv.style.display = 'none';
 
       // Check if chrome APIs are available
-      if (typeof chrome === 'undefined' || !chrome.tabs || !chrome.scripting) {
-        throw new Error('Chrome extension APIs not available. Please reload the extension.');
+      if (typeof chrome === 'undefined') {
+        throw new Error('Chrome extension APIs not available. Make sure this is running as a Chrome extension.');
+      }
+      
+      if (!chrome.tabs) {
+        throw new Error('Chrome tabs API not available. Check extension permissions.');
+      }
+      
+      if (!chrome.scripting) {
+        throw new Error('Chrome scripting API not available. Check extension permissions and manifest version.');
       }
 
       // Get current tab with comprehensive error handling
